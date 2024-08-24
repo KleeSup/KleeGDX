@@ -1,0 +1,3 @@
+rootProject.name = 'kleegdx'
+
+include 'core', 'server', 'client'

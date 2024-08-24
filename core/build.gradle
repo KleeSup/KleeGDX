@@ -1,0 +1,7 @@
+dependencies {
+
+}
+
+// Configure the source compatibility if necessary
+sourceCompatibility = rootProject.ext.javaVersion
+targetCompatibility = rootProject.ext.javaVersion

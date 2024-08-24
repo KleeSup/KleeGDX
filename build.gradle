@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+allprojects {
+    group = 'com.github.kleesup.kleegdx'
+    version = '1.0.0'
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io/'}
+    }
+
+    apply plugin: 'java'
+
+    // Common configurations, like encoding, can be set here
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+}
+
+subprojects {
+    // Subprojects specific configurations can be added here
+}
