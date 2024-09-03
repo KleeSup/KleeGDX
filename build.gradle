@@ -28,7 +28,7 @@ def projectName = 'KleeSwept'
 //Change this to whatever Maven Central group you might publish to, which is probably not this one if you aren't Tommy Ettinger.
 group 'com.github.kleesup'
 
-version "1.0.0" // You can set the version in gradle.properties .
+version "$VERSION" // You can set the version in gradle.properties .
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
@@ -47,8 +47,8 @@ if (JavaVersion.current().isJava8Compatible()) {
 compileJava {
     // Targeting Java 7 is the lowest version you could need to go at this point.
     // libGDX itself targets a mix of Java 7 (for most backends) and 8 (for LWJGL3).
-    sourceCompatibility = 8
-    targetCompatibility = 8
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
     if (JavaVersion.current().isJava9Compatible()) {
         options.release.set(8)
     }
