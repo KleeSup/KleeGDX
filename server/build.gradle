@@ -1,10 +1,8 @@
+apply plugin: 'java-library'
+
 dependencies {
     implementation project(':core')
     // Define server-specific dependencies here
     // For example:
     // implementation 'org.springframework.boot:spring-boot-starter-web'
 }
-
-// Configure the source compatibility if necessary
-sourceCompatibility = rootProject.ext.javaVersion
-targetCompatibility = rootProject.ext.javaVersion
