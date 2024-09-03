@@ -3,7 +3,14 @@ package com.github.kleesup.kleegdx.client;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
+/**
+ * A wrapper class for {@link Texture} and {@link TextureRegion} that can manage and render both.
+ * Switching freely between them is always possible via {@link #setTexture(Texture)} or
+ * {@link #setRegion(TextureRegion)} depending on what is wanted. Further modifications will then be done via
+ * multiple public attributes or via {@link #reset()}.
+ */
 public class TextureSprite {
 
     //attributes
@@ -41,8 +48,7 @@ public class TextureSprite {
         originX = width * .5f;
         originY = height * .5f;
         rotation = 0;
-        flipX = false;
-        flipY = false;
+        setFlip(false, false);
     }
 
     public TextureSprite copy(){
@@ -55,8 +61,7 @@ public class TextureSprite {
         sprite.originY = originY;
         sprite.scaleX = scaleX;
         sprite.scaleY = scaleY;
-        sprite.flipX = flipX;
-        sprite.flipY = flipY;
+        sprite.setFlip(flipX, flipY);
         sprite.rotation = rotation;
         return sprite;
     }
@@ -102,10 +107,13 @@ public class TextureSprite {
         else if(region.isFlipY() != flipY) region.flip(false, true);
     }
 
-
     public void setPosition(float x, float y){
         this.x = x;
         this.y = y;
+    }
+    public void setPosition(Vector2 position){
+        this.x = position.x;
+        this.y = position.y;
     }
 
 

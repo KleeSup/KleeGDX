@@ -1,5 +1,8 @@
 package com.github.kleesup.kleegdx.core;
 
+/**
+ * Utility class for detecting invalid inputs or arguments.
+ */
 public final class Verify {
     private Verify(){}
 
@@ -13,6 +16,5 @@ public final class Verify {
     public static void nonNullArg(Object obj, String msg){
         if(obj == null)throw new IllegalArgumentException(msg);
     }
-
 
 }
