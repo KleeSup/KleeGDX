@@ -1,6 +1,21 @@
-apply plugin: 'java-library'
+plugins{
+    id 'java-library'
+    id 'maven-publish'
+}
 
 dependencies {
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation project(':core')
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.github.kleesup.kleegdx'
+            artifactId = 'client'
+            version = "$VERSION"
+
+            from components.java
+        }
+    }
 }

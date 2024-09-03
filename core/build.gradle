@@ -1,6 +1,20 @@
-apply plugin: 'java-library'
+plugins{
+    id 'java-library'
+    id 'maven-publish'
+}
 
 dependencies {
 
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.github.kleesup.kleegdx'
+            artifactId = 'core'
+            version = "$VERSION"
+
+            from components.java
+        }
+    }
+}

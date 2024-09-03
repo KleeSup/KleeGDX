@@ -13,9 +13,9 @@ allprojects {
         mavenCentral()
         maven {url 'https://jitpack.io/'}
     }
-    apply plugin: 'java-library'
-    apply plugin: 'maven-publish'
 }
+
+
 
 //Obviously, change the next line to match your project name.
 def projectName = 'KleeSwept'
