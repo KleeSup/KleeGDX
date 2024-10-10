@@ -1,7 +1,13 @@
-package com.github.kleesup.kleegdx.server;
+package com.github.kleesup.kleegdx.core.net;
 
 import java.util.Random;
 
+/**
+ * Static utility class for networking related things.
+ * @author KleeSup
+ * @version 1.0
+ * @since 1.0.0
+ */
 public final class NetUtil {
     private NetUtil(){}
 

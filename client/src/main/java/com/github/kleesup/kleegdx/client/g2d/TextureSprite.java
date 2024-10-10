@@ -1,4 +1,4 @@
-package com.github.kleesup.kleegdx.client;
+package com.github.kleesup.kleegdx.client.g2d;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -35,6 +35,9 @@ public class TextureSprite {
         this.region = region;
     }
 
+    /**
+     * Resets all values to default.
+     */
     public void reset(){
         if(isFullTexture()){
             width = texture.getWidth();
@@ -51,6 +54,10 @@ public class TextureSprite {
         setFlip(false, false);
     }
 
+    /**
+     * Creates an identical copy of this object.
+     * @return The copied TextureSprite.
+     */
     public TextureSprite copy(){
         TextureSprite sprite = isFullTexture() ? new TextureSprite(texture) : new TextureSprite(region);
         sprite.x = x;
@@ -77,6 +84,8 @@ public class TextureSprite {
         return isFullTexture() ? new TextureRegion(texture) : region;
     }
 
+    /* -- Drawing -- */
+
     public void draw(Batch batch, float x, float y, float width, float height){
         if(isFullTexture()){
             batch.draw(texture, x, y, originX, originY, width, height, scaleX, scaleY, rotation, 0, 0,
@@ -93,6 +102,8 @@ public class TextureSprite {
     public void draw(Batch batch){
         draw(batch, x, y, width, height);
     }
+
+    /* -- Modification methods -- */
 
     public void setFlip(boolean flipX, boolean flipY){
         setFlipX(flipX);

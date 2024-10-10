@@ -4,7 +4,11 @@ plugins{
 }
 
 dependencies {
-
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    api "com.esotericsoftware:kryo:$kryoVersion"
+    api "com.github.crykn:kryonet:$kryoNetVersion"
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
 }
 
 publishing {

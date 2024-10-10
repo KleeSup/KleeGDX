@@ -4,8 +4,10 @@ plugins{
 }
 
 dependencies {
-    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    api "space.earlygrey:shapedrawer:$shapedrawerVersion"
     implementation project(':core')
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 }
 
 publishing {
