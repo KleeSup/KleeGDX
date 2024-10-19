@@ -4,7 +4,7 @@ plugins{
 }
 
 dependencies {
-    implementation project(':core')
+    api project(':core')
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     // Define server-specific dependencies here
