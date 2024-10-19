@@ -15,6 +15,7 @@ import com.github.kleesup.kleegdx.client.Game2d;
 public abstract class BaseScreen2d<Main extends Game2d> extends BaseScreen<Main> {
 
     protected Viewport viewport;
+    protected boolean centerCam;
     protected BaseScreen2d(Main main, Viewport viewport) {
         super(main);
         this.viewport = viewport;
@@ -90,6 +91,6 @@ public abstract class BaseScreen2d<Main extends Game2d> extends BaseScreen<Main>
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width,height,true);
+        viewport.update(width,height,centerCam);
     }
 }
