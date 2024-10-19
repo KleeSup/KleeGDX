@@ -8,7 +8,15 @@ import com.esotericsoftware.kryo.io.Output;
 /**
  * Base class for serialization abstraction with kryo. Can be further reimplemented and reimplemented for deep
  * serialization of many inheriting classes (e.g. Entity -> LivingEntity -> Player).
+ * <p>
+ * Note: This class alone or in an abstract layer is version dependent!
+ * This is because the class and all super classes load fields in a specified order which will crash if there are
+ * new fields added in the classes but old saves are loaded! Therefore this approach alone should only be used for
+ * networking! If you want to have a serialization approach that serializes version independent data which can be stored
+ * or otherwise used in networking, use {@link BaseMapSerializer}.
+ * </p>
  */
+@SerializationTarget(target = SerializationTarget.Type.NET)
 public abstract class BaseSerializer<T> extends Serializer<T> {
 
     /* -- Implementation -- */

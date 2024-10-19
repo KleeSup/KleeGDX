@@ -22,6 +22,17 @@ public final class Verify {
     }
 
     /**
+     * Checks a method argument for a specific negative condition. Therefore, if this condition is {@code true}, an
+     * exception is thrown.
+     * @param errorCon The negative condition to check.
+     * @param msg The message for the exception to throw.
+     * @throws IllegalArgumentException If the given condition is met.
+     */
+    public static void checkArg(boolean errorCon, String msg){
+        if(errorCon)throw new IllegalArgumentException(msg);
+    }
+
+    /**
      * Checks whether a given collection is seen as <i>valid</i>.
      * A collection considered valid is:
      * <l>
