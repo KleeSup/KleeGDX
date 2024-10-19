@@ -19,11 +19,21 @@ public class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Main> {
         stage = main.getStage();
     }
 
+    /**
+     * Builds a root table for the stage to push objects onto. Through generics, it can be any type.
+     * @param table The table instance to make the root table.
+     * @return The root table.
+     */
     protected <T extends Table> T buildRootTable(T table){
         table.setFillParent(true);
         stage.addActor(table);
         return table;
     }
+
+    /**
+     * Does the same as {@link #buildRootTable(Table)} but builds with Scene2d default {@link Table}.
+     * @return The root table.
+     */
     protected Table buildRootTable(){
         return buildRootTable(new Table());
     }
