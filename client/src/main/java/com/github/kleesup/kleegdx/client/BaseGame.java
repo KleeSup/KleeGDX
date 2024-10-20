@@ -20,7 +20,8 @@ public abstract class BaseGame implements ApplicationListener {
     protected Logger logger;
     protected final InputMultiplexer inputManager = new InputMultiplexer();
     protected final AtomicBoolean paused = new AtomicBoolean(false);
-
+    protected boolean fixAndroidResume = true;
+    private boolean alreadyCreated = false;
 
     protected void buildLogger(String tag){
         this.logger = new Logger(tag, 3);
@@ -54,6 +55,11 @@ public abstract class BaseGame implements ApplicationListener {
 
     @Override
     public void create() {
+        if(alreadyCreated && fixAndroidResume){
+            resume();
+            return;
+        }
+        alreadyCreated = true;
         Gdx.input.setInputProcessor(inputManager);
     }
 
