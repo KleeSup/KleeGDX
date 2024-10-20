@@ -11,9 +11,10 @@ import com.github.kleesup.kleegdx.client.Game2d;
  * because it doesn't require a {@link com.badlogic.gdx.utils.viewport.Viewport} and further also doesn't render to any
  * batch.
  */
-public class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Main> {
+public abstract class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Main> {
 
     protected final Stage stage;
+    protected Table rootTable;
     protected BaseUIScreen2d(Main main) {
         super(main);
         stage = main.getStage();
@@ -25,8 +26,10 @@ public class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Main> {
      * @return The root table.
      */
     protected <T extends Table> T buildRootTable(T table){
+        if(rootTable != null)removeRoot();
         table.setFillParent(true);
         stage.addActor(table);
+        rootTable = table;
         return table;
     }
 
@@ -36,6 +39,13 @@ public class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Main> {
      */
     protected Table buildRootTable(){
         return buildRootTable(new Table());
+    }
+
+    /**
+     * Removes the current root table.
+     */
+    private void removeRoot(){
+        main.getStage().getActors().removeValue(rootTable, true);
     }
 
     @Override
@@ -64,17 +74,17 @@ public class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Main> {
     }
 
     @Override
-    public void show() {
-
-    }
-
-    @Override
     public void resize(int i, int i1) {
         stage.getViewport().update(i,i1,true);
     }
 
     @Override
-    public void dispose() {
+    public void hide() {
+        removeRoot();
+    }
 
+    @Override
+    public void dispose() {
+        removeRoot();
     }
 }

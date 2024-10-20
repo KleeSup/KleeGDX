@@ -2,7 +2,9 @@ package com.github.kleesup.kleegdx.client;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.utils.Logger;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -14,12 +16,14 @@ public abstract class BaseGame implements ApplicationListener {
 
     @Getter
     protected Screen currentScreen;
+    @Setter(value = AccessLevel.PROTECTED)
     protected boolean autoDisposeScreen = true;
     private ApplicationListener screenManager;
     @Getter
     protected Logger logger;
     protected final InputMultiplexer inputManager = new InputMultiplexer();
     protected final AtomicBoolean paused = new AtomicBoolean(false);
+    @Setter(value = AccessLevel.PROTECTED)
     protected boolean fixAndroidResume = true;
     private boolean alreadyCreated = false;
 
