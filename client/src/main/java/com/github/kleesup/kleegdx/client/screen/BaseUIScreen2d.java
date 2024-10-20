@@ -70,7 +70,7 @@ public class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Main> {
 
     @Override
     public void resize(int i, int i1) {
-
+        stage.getViewport().update(i,i1,true);
     }
 
     @Override

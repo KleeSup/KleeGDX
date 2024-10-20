@@ -31,6 +31,7 @@ public abstract class Game2d extends BaseGame implements ApplicationListener {
         batch = new SpriteBatch();
         shapeDrawer = buildDrawer();
         stage = new Stage();
+        inputManager.addProcessor(stage);
     }
 
     private ShapeDrawer buildDrawer(){
