@@ -39,6 +39,10 @@ public class AssetLoader implements Disposable {
         this.ownsManager = true;
     }
 
+    /**
+     * See {@link AssetManager#update()}. Further calls {@link #afterFinish()} when finished.
+     * @return Whether the loading was finished.
+     */
     public boolean update(){
         if(manager.update()){
             afterFinish();
@@ -47,11 +51,17 @@ public class AssetLoader implements Disposable {
         return false;
     }
 
+    /**
+     * Forces the manager to finish loading.
+     */
     public void finish(){
         manager.finishLoading();
         afterFinish();
     }
 
+    /**
+     * Called when the asset loading was finished. Does final asset writing and cleanup.
+     */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void afterFinish(){
         //first, write to all assets that are loaded through the AssetManager
@@ -60,6 +70,7 @@ public class AssetLoader implements Disposable {
         }
         TO_LOAD.clear();
         //now build all build assets without dependencies
+        if(TO_BUILD.isEmpty())return;
         for(Asset.BuildAsset asset : TO_BUILD.getCollection(false)){
             asset.deploy(asset.builder.get());
         }
@@ -82,6 +93,11 @@ public class AssetLoader implements Disposable {
             }
         }
         TO_BUILD.clearAll();
+        System.gc();
+    }
+
+    public boolean isFinished(){
+        return manager.isFinished() && TO_BUILD.isEmpty();
     }
 
     @Override
@@ -91,6 +107,8 @@ public class AssetLoader implements Disposable {
         }
         if(ownsManager)manager.dispose();
     }
+
+    /* -- Queueing -- */
 
     public <T> Asset<T> queueLoad(AssetDescriptor<T> descriptor){
         Verify.nonNullArg(descriptor, "AssetDescriptor cannot be null!");
@@ -118,6 +136,5 @@ public class AssetLoader implements Disposable {
     public <T> Asset<T> qB(Supplier<T> b, Asset<?>... d){
         return queueBuild(b,d);
     }
-
 
 }

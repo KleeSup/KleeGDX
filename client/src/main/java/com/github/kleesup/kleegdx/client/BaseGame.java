@@ -18,7 +18,7 @@ public abstract class BaseGame implements ApplicationListener {
     protected Screen currentScreen;
     @Setter(value = AccessLevel.PROTECTED)
     protected boolean autoDisposeScreen = true;
-    private ApplicationListener screenManager;
+    private ApplicationListener screenManager = NULL_MANAGER;
     @Getter
     protected Logger logger;
     protected final InputMultiplexer inputManager = new InputMultiplexer();

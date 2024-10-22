@@ -156,4 +156,11 @@ public class MappedCollection<K, V> {
         return elements.containsKey(key);
     }
 
+    /**
+     * @return {@code true} if the root map is empty, {@code false} otherwise.
+     */
+    public boolean isEmpty(){
+        return elements.isEmpty();
+    }
+
 }
