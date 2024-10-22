@@ -44,7 +44,7 @@ public abstract class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Mai
     /**
      * Removes the current root table.
      */
-    private void removeRoot(){
+    protected void removeRoot(){
         main.getStage().getActors().removeValue(rootTable, true);
     }
 
