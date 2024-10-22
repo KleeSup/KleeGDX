@@ -30,9 +30,7 @@ public class LocalCommunicator implements Communicator {
     }
 
     @Override
-    public void update(float delta) {
-        server.update(delta);
-    }
+    public void update(float delta) {}
 
     @Override
     public void dispose() {}
