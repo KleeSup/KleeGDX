@@ -114,6 +114,7 @@ public class AssetLoader implements Disposable {
         Verify.nonNullArg(descriptor, "AssetDescriptor cannot be null!");
         Asset.LoadAsset<T> asset = new Asset.LoadAsset<>(descriptor);
         TO_LOAD.add(asset);
+        manager.load(asset.descriptor);
         if(asset.needsDispose())toDispose.add(asset);
         return asset;
     }
