@@ -9,7 +9,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * A simple packet queue based on {@link ConcurrentLinkedQueue} that can receive packets and handle/clear the queue
- * when updated via {@link #update(float)}.
+ * when updated via {@link #update(float)}. If {@link #maxPacketsPerRead} is set to a value smaller than {@code 0}, it
+ * will be set to {@link Integer#MAX_VALUE}.
  */
 @Getter
 public abstract class PacketQueue extends ConcurrentLinkedQueue<Object> implements Updateable {
