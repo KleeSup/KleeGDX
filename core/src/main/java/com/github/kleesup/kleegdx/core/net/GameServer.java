@@ -31,8 +31,8 @@ public abstract class GameServer extends Server implements Updateable {
         this.logger = buildLogger();
         if(this.logger != null)this.logger.setLevel(Logger.DEBUG);
         this.useUDP = useUDP;
-        this.allListeners = new Array<>(2);
-        this.updateListeners = new Array<>(2);
+        this.allListeners = new Array<>(false, 2, Listener.class);
+        this.updateListeners = new Array<>(false, 2, Listener.class);
     }
 
     /* -- Logging -- */

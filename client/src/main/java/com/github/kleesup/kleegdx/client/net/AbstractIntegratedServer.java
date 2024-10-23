@@ -6,7 +6,6 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.github.kleesup.kleegdx.core.net.GameServer;
 import com.github.kleesup.kleegdx.core.net.packet.PacketQueue;
-import com.github.kleesup.kleegdx.core.util.Updateable;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +27,7 @@ public abstract class AbstractIntegratedServer extends GameServer {
         }
         @Override
         public void update(float delta) {
+            if(server.allListeners.isEmpty())return;
             Listener[] listeners = server.allListeners.items;
             Object obj;
             int reads = 0;
@@ -49,7 +49,7 @@ public abstract class AbstractIntegratedServer extends GameServer {
         this.hostQueue = new HostQueue(this, maxHostPacketsPerRead);
     }
     public AbstractIntegratedServer(boolean useUDP) {
-        this(useUDP, 100);
+        this(useUDP, 50);
     }
 
     @Override
