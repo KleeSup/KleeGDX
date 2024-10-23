@@ -7,8 +7,8 @@ package com.github.kleesup.kleegdx.client.net;
  */
 public class LocalCommunicator implements Communicator {
 
-    private final AbstractIntegratedServer<?> server;
-    public LocalCommunicator(AbstractIntegratedServer<?> server){
+    protected final AbstractIntegratedServer server;
+    public LocalCommunicator(AbstractIntegratedServer server){
         this.server = server;
     }
 

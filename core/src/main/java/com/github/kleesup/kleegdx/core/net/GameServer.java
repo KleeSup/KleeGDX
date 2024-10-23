@@ -1,5 +1,6 @@
 package com.github.kleesup.kleegdx.core.net;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -9,13 +10,12 @@ import lombok.Getter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Abstract expansion of {@link Server} from KryoNet which supports server binding, logging and updating.
  */
-public abstract class GameServer extends Server {
+public abstract class GameServer extends Server implements Updateable {
 
     /* -- Server content -- */
     @Getter protected final Logger logger;
@@ -24,10 +24,15 @@ public abstract class GameServer extends Server {
     protected final AtomicBoolean socketOpen = new AtomicBoolean(false);
     protected boolean useUDP;
     protected volatile boolean updatesAutomatically = true;
+    protected final Object listenerLock = new Object();
+    protected final Array<Listener> allListeners;
+    protected final Array<Listener> updateListeners;
     public GameServer(boolean useUDP){
         this.logger = buildLogger();
         if(this.logger != null)this.logger.setLevel(Logger.DEBUG);
         this.useUDP = useUDP;
+        this.allListeners = new Array<>(2);
+        this.updateListeners = new Array<>(2);
     }
 
     /* -- Logging -- */
@@ -63,6 +68,38 @@ public abstract class GameServer extends Server {
         }
     }
 
+    /* -- Listeners -- */
+
+    @Override
+    public void addListener(Listener listener) {
+        super.addListener(listener);
+        if(listener == null)return;
+        synchronized (listenerLock){
+            allListeners.add(listener);
+            if(listener instanceof Updateable)updateListeners.add(listener);
+        }
+    }
+
+    @Override
+    public void removeListener(Listener listener) {
+        super.removeListener(listener);
+        if(listener == null)return;
+        synchronized (listenerLock){
+            allListeners.removeValue(listener, true);
+            if(listener instanceof Updateable)updateListeners.removeValue(listener, true);
+        }
+    }
+
+    /**
+     * Will update all listeners that require an update. Should be called in main {@link #update(float)} when update
+     * listeners are added.
+     * @param delta The delta time since the last update.
+     */
+    protected void updateAllListeners(float delta){
+        if(updateListeners.isEmpty())return;
+        for(Listener listener : updateListeners.items) ((Updateable) listener).update(delta);
+    }
+
     /* -- Lifecycle -- */
 
     @Override
@@ -83,11 +120,10 @@ public abstract class GameServer extends Server {
         log("Server stopped!");
     }
 
-    /**
-     * Updates the server based on the given delta value.
-     * @param delta The time since the last update in seconds.
-     */
-    protected abstract void update(float delta);
+    @Override
+    public void update(float delta) {
+        updateAllListeners(delta);
+    }
 
     /* -- Socket -- */
 
@@ -128,6 +164,8 @@ public abstract class GameServer extends Server {
         socketOpen.set(true);
     }
 
+    /* -- Saving and Disposing -- */
+
     @Override
     public void close() {
         log("Closing socket...");
@@ -135,8 +173,6 @@ public abstract class GameServer extends Server {
         socketOpen.set(false);
         log("Socket closed!");
     }
-
-    /* -- Saving and Disposing -- */
 
     @Override
     public void dispose() {
