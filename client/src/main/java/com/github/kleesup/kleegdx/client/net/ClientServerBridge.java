@@ -74,7 +74,7 @@ public abstract class ClientServerBridge implements Communicator, IPacketQueueab
      * @param obj The object from the server.
      */
     public void processFromServer(Object obj){
-        if(canReceivePackets)((QueuedTypeListenerClient) communicator).queuePacket(obj);
+        if(canReceivePackets)((IPacketQueueable) communicator).queuePacket(obj);
     }
 
     @Override
