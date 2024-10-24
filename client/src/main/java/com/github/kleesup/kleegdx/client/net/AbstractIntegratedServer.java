@@ -28,13 +28,12 @@ public abstract class AbstractIntegratedServer extends GameServer {
         @Override
         public void update(float delta) {
             if(server.allListeners.isEmpty())return;
-            Listener[] listeners = server.allListeners.items;
             Object obj;
             int reads = 0;
             Connection host = server.host instanceof Connection ? (Connection) server.host : null;
             while (reads <= getMaxPacketsPerRead() && (obj = poll()) != null) {
                 reads++;
-                for(Listener listener : listeners) listener.received(host, obj);
+                for(Listener listener : server.allListeners) listener.received(host, obj);
             }
         }
         @Override
@@ -76,7 +75,7 @@ public abstract class AbstractIntegratedServer extends GameServer {
         if(updatesAutomatically){ //give to queue
             hostQueue.add(obj);
         }else{
-            for(Listener listener : allListeners.items)
+            for(Listener listener : allListeners)
                 listener.received(host instanceof Connection ? (Connection) host : null, obj);
         }
     }

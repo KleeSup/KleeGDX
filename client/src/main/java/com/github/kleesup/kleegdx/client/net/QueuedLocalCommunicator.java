@@ -2,6 +2,7 @@ package com.github.kleesup.kleegdx.client.net;
 
 import com.github.kleesup.kleegdx.core.net.NetParticipant;
 import com.github.kleesup.kleegdx.core.net.listener.QueuedTypeListenerClient;
+import com.github.kleesup.kleegdx.core.net.packet.IPacketQueueable;
 import lombok.Getter;
 
 /**
@@ -10,7 +11,7 @@ import lombok.Getter;
  * server site to send packets to. Packets send to this participant will be queued instantly.
  */
 @Getter
-public class QueuedLocalCommunicator extends LocalCommunicator implements NetParticipant {
+public class QueuedLocalCommunicator extends LocalCommunicator implements NetParticipant, IPacketQueueable {
 
     protected final QueuedTypeListenerClient listener;
     public QueuedLocalCommunicator(AbstractIntegratedServer server, int maxPacketsPerRead) {
@@ -31,6 +32,11 @@ public class QueuedLocalCommunicator extends LocalCommunicator implements NetPar
      */
     @Override
     public void send(Object obj, boolean udp) {
+        listener.queuePacket(obj);
+    }
+
+    @Override
+    public void queuePacket(Object obj) {
         listener.queuePacket(obj);
     }
 }

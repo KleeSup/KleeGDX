@@ -25,14 +25,14 @@ public abstract class GameServer extends Server implements Updateable {
     protected boolean useUDP;
     protected volatile boolean updatesAutomatically = true;
     protected final Object listenerLock = new Object();
-    protected final Array<Listener> allListeners;
-    protected final Array<Listener> updateListeners;
+    protected final ArrayList<Listener> allListeners;
+    protected final ArrayList<Listener> updateListeners;
     public GameServer(boolean useUDP){
         this.logger = buildLogger();
         if(this.logger != null)this.logger.setLevel(Logger.DEBUG);
         this.useUDP = useUDP;
-        this.allListeners = new Array<>(false, 2, Listener.class);
-        this.updateListeners = new Array<>(false, 2, Listener.class);
+        this.allListeners = new ArrayList<>(2);
+        this.updateListeners = new ArrayList<>(2);
     }
 
     /* -- Logging -- */
@@ -85,8 +85,8 @@ public abstract class GameServer extends Server implements Updateable {
         super.removeListener(listener);
         if(listener == null)return;
         synchronized (listenerLock){
-            allListeners.removeValue(listener, true);
-            if(listener instanceof Updateable)updateListeners.removeValue(listener, true);
+            allListeners.remove(listener);
+            if(listener instanceof Updateable)updateListeners.remove(listener);
         }
     }
 
@@ -97,7 +97,7 @@ public abstract class GameServer extends Server implements Updateable {
      */
     protected void updateAllListeners(float delta){
         if(updateListeners.isEmpty())return;
-        for(Listener listener : updateListeners.items) ((Updateable) listener).update(delta);
+        for(Listener listener : updateListeners) ((Updateable) listener).update(delta);
     }
 
     /* -- Lifecycle -- */

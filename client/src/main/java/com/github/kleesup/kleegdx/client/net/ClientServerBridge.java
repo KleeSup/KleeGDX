@@ -1,6 +1,8 @@
 package com.github.kleesup.kleegdx.client.net;
 
 import com.esotericsoftware.kryonet.Client;
+import com.github.kleesup.kleegdx.core.net.listener.QueuedTypeListenerClient;
+import com.github.kleesup.kleegdx.core.net.packet.IPacketQueueable;
 import com.github.kleesup.kleegdx.core.net.packet.TypePacketProcessor;
 import lombok.Getter;
 
@@ -10,10 +12,10 @@ import lombok.Getter;
  * where received packets are queued and later handled. This bridge needs to be updated via {@link #update(float)}
  */
 @Getter
-public abstract class ClientServerBridge implements Communicator {
+public abstract class ClientServerBridge implements Communicator, IPacketQueueable {
 
     private final Communicator communicator;
-
+    private final boolean canReceivePackets;
     /**
      * Builds a new bridge that connects to a host remote server. This will use the {@link RemoteCommunicator}.
      * @param clientObj A (custom) client object that will be given to the {@link RemoteCommunicator}.
@@ -26,6 +28,7 @@ public abstract class ClientServerBridge implements Communicator {
         RemoteCommunicator remote = new RemoteCommunicator(clientObj, host, port, useUdp, maxPacketsPerRead);
         this.communicator = remote;
         registerIncomingPackets(remote);
+        this.canReceivePackets = true;
     }
     public ClientServerBridge(String host, int port, boolean useUdp, int maxPacketsPerRead){
         this(new Client(), host, port, useUdp, maxPacketsPerRead);
@@ -37,6 +40,7 @@ public abstract class ClientServerBridge implements Communicator {
      */
     public ClientServerBridge(AbstractIntegratedServer server){
         this.communicator = new LocalCommunicator(server);
+        this.canReceivePackets = false;
     }
 
     /**
@@ -49,7 +53,10 @@ public abstract class ClientServerBridge implements Communicator {
         QueuedLocalCommunicator communicator = new QueuedLocalCommunicator(server,maxPacketsPerRead);
         this.communicator = communicator;
         registerIncomingPackets(communicator.getListener());
+        this.canReceivePackets = true;
     }
+
+    /* -- Packets -- */
 
     /**
      * Required when the bridge was constructed via
@@ -61,6 +68,19 @@ public abstract class ClientServerBridge implements Communicator {
      * @param processor The packet processor to register packets to.
      */
     protected abstract void registerIncomingPackets(TypePacketProcessor processor);
+
+    /**
+     * Processed when an integrated server sends a packet to the host client.
+     * @param obj The object from the server.
+     */
+    public void processFromServer(Object obj){
+        if(canReceivePackets)((QueuedTypeListenerClient) communicator).queuePacket(obj);
+    }
+
+    @Override
+    public void queuePacket(Object obj) {
+        processFromServer(obj);
+    }
 
     /* -- Implementation of Communicator -- */
 

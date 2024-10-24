@@ -15,7 +15,7 @@ import java.util.function.BiConsumer;
  * This means to be able to read packets, they need to be registered first via {@link #register(Class, BiConsumer)}.
  * </p>
  */
-public class RemoteCommunicator extends QueuedTypeListenerClient implements Communicator {
+public class RemoteCommunicator extends QueuedTypeListenerClient implements Communicator{
 
     private final Client client;
     public RemoteCommunicator(Client clientObj, String host, int port, boolean udp, int maxPacketsPerRead){

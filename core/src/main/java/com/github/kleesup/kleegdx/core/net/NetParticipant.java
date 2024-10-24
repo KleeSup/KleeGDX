@@ -21,7 +21,7 @@ package com.github.kleesup.kleegdx.core.net;
  * <pre>{@code
  *     public class ClientPlayer extends Player{
  *          public void send(Object obj){
- *              IntegratedServer.getInstance().processDirectly(obj);
+ *              MyClientServerBridge.getInstance().processFromServer(obj);
  *          }
  *          public boolean isConnected(){
  *              return IntegratedServer.getInstance().isServerRunning();
