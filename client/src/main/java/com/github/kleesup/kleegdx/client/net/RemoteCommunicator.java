@@ -3,6 +3,7 @@ package com.github.kleesup.kleegdx.client.net;
 import com.esotericsoftware.kryonet.Client;
 import com.github.kleesup.kleegdx.core.net.listener.QueuedTypeListenerClient;
 import com.github.kleesup.kleegdx.core.util.Verify;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.util.function.BiConsumer;
@@ -15,6 +16,7 @@ import java.util.function.BiConsumer;
  * This means to be able to read packets, they need to be registered first via {@link #register(Class, BiConsumer)}.
  * </p>
  */
+@Getter
 public class RemoteCommunicator extends QueuedTypeListenerClient implements Communicator{
 
     private final Client client;
