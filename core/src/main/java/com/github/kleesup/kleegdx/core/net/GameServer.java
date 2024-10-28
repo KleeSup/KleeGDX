@@ -27,6 +27,7 @@ public abstract class GameServer extends Server implements Updateable {
     protected boolean useUDP;
     protected volatile boolean updatesAutomatically;
     protected final Object listenerLock = new Object();
+    protected final Object updateLock = new Object();
     protected final ArrayList<Listener> allListeners;
     protected final ArrayList<Listener> updateListeners;
     private ServerUpdateThread updateThread;
@@ -36,6 +37,7 @@ public abstract class GameServer extends Server implements Updateable {
         this.useUDP = useUDP;
         this.allListeners = new ArrayList<>(2);
         this.updateListeners = new ArrayList<>(2);
+        this.updatesAutomatically = true;
     }
 
     /* -- Logging -- */
@@ -45,27 +47,46 @@ public abstract class GameServer extends Server implements Updateable {
         logger.info(msg);
     }
 
-    /* -- Kryo Updating -- */
+    /* -- Automatic updating -- */
 
     /**
      * This method is useful to decide whether KryoNet {@link Server#update(int)} should also call
      * {@link #update(float)} from the game server. By default, this is set to {@code true}.
      * @param enable {@code true} enables the automatic updating through KryoNet, {@code false} otherwise.
      */
-    protected synchronized void setUpdateAutomatically(boolean enable){
-        updatesAutomatically = enable;
-        if(enable && this.updateThread == null) {
-            this.updateThread = new ServerUpdateThread(this, ticks);
-            this.updateThread.start();
-            log("Update thread started!");
-        }else if(this.updateThread != null){
-            this.updateThread.terminate();
-            this.updateThread = null;
-            log("Update thread stopped!");
+    protected void setUpdateAutomatically(boolean enable){
+        synchronized (updateLock){
+            updatesAutomatically = enable;
+            if(enable && this.updateThread == null) {
+                startUpdateThread();
+                log("Update thread started!");
+            }else if(this.updateThread != null){
+                stopUpdateThread();
+                log("Update thread stopped!");
+            }
         }
     }
     protected boolean doesUpdateAutomatically(){
         return updatesAutomatically;
+    }
+
+    protected void setUpdateTicks(int ticks){
+        synchronized (updateLock){
+            this.ticks = ticks;
+            if(updatesAutomatically){
+                stopUpdateThread();
+                startUpdateThread();
+            }
+        }
+    }
+
+    private void startUpdateThread(){
+        this.updateThread = new ServerUpdateThread(this, ticks);
+        this.updateThread.start();
+    }
+    private void stopUpdateThread(){
+        this.updateThread.terminate();
+        this.updateThread = null;
     }
 
     /* -- Listeners -- */
@@ -119,8 +140,7 @@ public abstract class GameServer extends Server implements Updateable {
         super.stop();
         running.set(false);
         log("Server stopped!");
-        updateThread.terminate();
-        updateThread = null;
+        stopUpdateThread();
     }
 
     @Override
