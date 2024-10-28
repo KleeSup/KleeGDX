@@ -21,7 +21,7 @@ public abstract class GameServer extends Server implements Updateable {
     /* -- Server content -- */
     @Getter protected final Logger logger;
     @Getter private int port = -1;
-    @Getter @Setter private int ticks = 60;
+    @Getter private int ticks = 60;
     protected final AtomicBoolean running = new AtomicBoolean(false);
     protected final AtomicBoolean socketOpen = new AtomicBoolean(false);
     protected boolean useUDP;
