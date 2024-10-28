@@ -11,7 +11,7 @@ public class ConsoleLogger extends AbstractLogger {
     /**
      * Formatting modes for log tag and color.
      */
-    private enum Mode{
+    enum Mode{
         INFO("", "[I]"),            //no color
         DEBUG("\u001B[34m", "[D]"), //blue color
         ERROR("\u001B[31m", "[E]"); //red color
@@ -38,7 +38,7 @@ public class ConsoleLogger extends AbstractLogger {
      * @param type The type for logging.
      * @return The converted mode.
      */
-    private Mode convertToMode(LogType type){
+    Mode convertToMode(LogType type){
         Mode mode;
         switch (type){
             default:

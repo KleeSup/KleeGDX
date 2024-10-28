@@ -168,6 +168,7 @@ public abstract class GameServer extends Server implements Updateable {
 
     @Override
     public void close() {
+        if(!socketOpen.get())return; //kryo closes server even if it is not open on bind()
         log("Closing socket...");
         super.close();
         socketOpen.set(false);

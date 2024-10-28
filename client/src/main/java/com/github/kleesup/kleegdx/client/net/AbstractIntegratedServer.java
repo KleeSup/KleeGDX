@@ -1,7 +1,5 @@
 package com.github.kleesup.kleegdx.client.net;
 
-import com.badlogic.gdx.utils.PooledLinkedList;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.github.kleesup.kleegdx.core.net.GameServer;
