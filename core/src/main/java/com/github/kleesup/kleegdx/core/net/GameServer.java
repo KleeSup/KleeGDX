@@ -4,8 +4,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.github.kleesup.kleegdx.core.concurrent.ServerUpdateThread;
 import com.github.kleesup.kleegdx.core.util.Updateable;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,6 +22,7 @@ public abstract class GameServer extends Server implements Updateable {
     /* -- Server content -- */
     @Getter protected final Logger logger;
     @Getter private int port = -1;
+    @Getter @Setter private int ticks = 60;
     protected final AtomicBoolean running = new AtomicBoolean(false);
     protected final AtomicBoolean socketOpen = new AtomicBoolean(false);
     protected boolean useUDP;
@@ -27,6 +30,7 @@ public abstract class GameServer extends Server implements Updateable {
     protected final Object listenerLock = new Object();
     protected final ArrayList<Listener> allListeners;
     protected final ArrayList<Listener> updateListeners;
+    private ServerUpdateThread updateThread;
     public GameServer(boolean useUDP){
         this.logger = buildLogger();
         if(this.logger != null)this.logger.setLevel(Logger.DEBUG);
@@ -51,21 +55,16 @@ public abstract class GameServer extends Server implements Updateable {
      */
     protected synchronized void setUpdateAutomatically(boolean enable){
         updatesAutomatically = enable;
-        if(enable)time = System.currentTimeMillis();
+        if(enable) {
+            this.updateThread = new ServerUpdateThread(this, ticks);
+            this.updateThread.start();
+        }else if(this.updateThread != null){
+            this.updateThread.terminate();
+            this.updateThread = null;
+        }
     }
     protected boolean doesUpdateAutomatically(){
         return updatesAutomatically;
-    }
-
-    // implementation
-    private long time;
-    @Override
-    public void update(int timeout) throws IOException {
-        super.update(timeout);
-        if(updatesAutomatically){
-            update((System.currentTimeMillis() - time) * Updateable.MILLIS_TO_SEC);
-            time = System.currentTimeMillis();
-        }
     }
 
     /* -- Listeners -- */
