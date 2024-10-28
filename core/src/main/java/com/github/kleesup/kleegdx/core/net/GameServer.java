@@ -1,6 +1,5 @@
 package com.github.kleesup.kleegdx.core.net;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -26,7 +25,7 @@ public abstract class GameServer extends Server implements Updateable {
     protected final AtomicBoolean running = new AtomicBoolean(false);
     protected final AtomicBoolean socketOpen = new AtomicBoolean(false);
     protected boolean useUDP;
-    protected volatile boolean updatesAutomatically = true;
+    protected volatile boolean updatesAutomatically;
     protected final Object listenerLock = new Object();
     protected final ArrayList<Listener> allListeners;
     protected final ArrayList<Listener> updateListeners;
@@ -55,12 +54,14 @@ public abstract class GameServer extends Server implements Updateable {
      */
     protected synchronized void setUpdateAutomatically(boolean enable){
         updatesAutomatically = enable;
-        if(enable) {
+        if(enable && this.updateThread == null) {
             this.updateThread = new ServerUpdateThread(this, ticks);
             this.updateThread.start();
+            log("Update thread started!");
         }else if(this.updateThread != null){
             this.updateThread.terminate();
             this.updateThread = null;
+            log("Update thread stopped!");
         }
     }
     protected boolean doesUpdateAutomatically(){
@@ -108,6 +109,7 @@ public abstract class GameServer extends Server implements Updateable {
         super.start();
         running.set(true);
         log("Server started!");
+        setUpdateAutomatically(updatesAutomatically);
     }
 
     @Override
@@ -117,6 +119,8 @@ public abstract class GameServer extends Server implements Updateable {
         super.stop();
         running.set(false);
         log("Server stopped!");
+        updateThread.terminate();
+        updateThread = null;
     }
 
     @Override
