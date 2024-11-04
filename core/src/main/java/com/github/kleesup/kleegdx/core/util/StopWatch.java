@@ -10,7 +10,9 @@ import lombok.Setter;
  */
 public class StopWatch {
 
-    private float current, max, inv_max;
+    @Getter
+    private float max;
+    private float current, inv_max;
     @Getter
     @Setter
     private boolean looping;
