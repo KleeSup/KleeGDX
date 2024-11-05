@@ -1,11 +1,15 @@
 package com.github.kleesup.kleegdx.core.serialize;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 /**
  * An implementation of {@link IDataTransferable} featuring some sort of base class that constantly holds its data
  * transfer object (caching instead of recreating each {@link #toDataTransferObject()} call). Therefore, all methods
  * updating transferable data also need to update the DTO object. In this case it might be better to keep fields in
  * the DTO object and only read from and write to it.
  */
+@Getter(value = AccessLevel.PROTECTED)
 public abstract class AbstractSingleDataTransferable<T> implements IDataTransferable<T> {
 
     /** Internal hold DTO object. */
