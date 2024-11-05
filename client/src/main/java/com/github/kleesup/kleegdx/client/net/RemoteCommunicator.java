@@ -19,10 +19,12 @@ import java.util.function.BiConsumer;
 @Getter
 public class RemoteCommunicator extends QueuedTypeListenerClient implements Communicator{
 
+    private boolean ownsClient;
     private final Client client;
     public RemoteCommunicator(Client clientObj, String host, int port, boolean udp, int maxPacketsPerRead){
         super(maxPacketsPerRead);
         Verify.nonNullArg(clientObj, "Client cannot be null!");
+        ownsClient = true;
         this.client = clientObj;
         this.client.addListener(this);
         this.client.start();
@@ -35,6 +37,7 @@ public class RemoteCommunicator extends QueuedTypeListenerClient implements Comm
     }
     public RemoteCommunicator(String host, int port, boolean udp, int maxPacketsPerRead){
         this(new Client(), host, port, udp, maxPacketsPerRead);
+        ownsClient = false;
     }
 
     /* -- Communicator implementation -- */
@@ -57,7 +60,8 @@ public class RemoteCommunicator extends QueuedTypeListenerClient implements Comm
     @Override
     public void dispose() {
         try {
-            client.dispose();
+            if(ownsClient)client.dispose();
+            else client.stop();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

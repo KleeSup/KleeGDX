@@ -51,21 +51,21 @@ public abstract class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Mai
     @Override
     public void render(float delta) {
         super.render(delta);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        main.getStage().act();
-        main.getStage().draw();
+        beforeRender(delta);
+        onRender(delta);
+        afterRender(delta);
     }
 
     /* -- Empty implemented methods -- */
 
     @Override
-    protected void beforeRender(float delta) {
-
-    }
+    protected void beforeRender(float delta) {}
 
     @Override
     protected void onRender(float delta) {
-
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        main.getStage().act();
+        main.getStage().draw();
     }
 
     @Override

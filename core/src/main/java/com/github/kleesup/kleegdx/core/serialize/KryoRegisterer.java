@@ -23,13 +23,13 @@ import java.lang.reflect.InvocationTargetException;
 @Getter
 public class KryoRegisterer {
 
-    private final Kryo kryo;
+    protected final Kryo kryo;
     public KryoRegisterer(Kryo kryo){
         this.kryo = kryo;
         registerDefaults();
     }
 
-    private void registerDefaults(){
+    protected void registerDefaults(){
         kryo.register(Vector2.class, new Serializer<Vector2>() {
             @Override
             public void write(Kryo kryo, Output output, Vector2 object) {

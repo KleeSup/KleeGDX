@@ -47,6 +47,10 @@ public abstract class GameServer extends Server implements Updateable {
         logger.info(msg);
     }
 
+    public void debug(String msg){
+        logger.debug(msg);
+    }
+
     /* -- Automatic updating -- */
 
     /**

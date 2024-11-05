@@ -1,7 +1,7 @@
 package com.github.kleesup.kleegdx.client.net;
 
 import com.esotericsoftware.kryonet.Client;
-import com.github.kleesup.kleegdx.core.net.listener.QueuedTypeListenerClient;
+import com.esotericsoftware.kryonet.Connection;
 import com.github.kleesup.kleegdx.core.net.packet.IPacketQueueable;
 import com.github.kleesup.kleegdx.core.net.packet.TypePacketProcessor;
 import lombok.Getter;
@@ -25,7 +25,18 @@ public abstract class ClientServerBridge implements Communicator, IPacketQueueab
      * @param maxPacketsPerRead The max amount of packets that will be read per {@link #update(float)}.
      */
     public ClientServerBridge(Client clientObj, String host, int port, boolean useUdp, int maxPacketsPerRead){
-        RemoteCommunicator remote = new RemoteCommunicator(clientObj, host, port, useUdp, maxPacketsPerRead);
+        RemoteCommunicator remote = new RemoteCommunicator(clientObj, host, port, useUdp, maxPacketsPerRead){
+            @Override
+            public void connected(Connection connection) {
+                super.connected(connection);
+                onConnect();
+            }
+            @Override
+            public void disconnected(Connection connection) {
+                super.disconnected(connection);
+                onDisconnect();
+            }
+        };
         this.communicator = remote;
         registerIncomingPackets(remote);
         this.canReceivePackets = true;
@@ -69,6 +80,13 @@ public abstract class ClientServerBridge implements Communicator, IPacketQueueab
      */
     protected abstract void registerIncomingPackets(TypePacketProcessor processor);
 
+    @Override
+    public void queuePacket(Object obj) {
+        processFromServer(obj);
+    }
+
+    /* -- Integrated -- */
+
     /**
      * Processed when an integrated server sends a packet to the host client.
      * @param obj The object from the server.
@@ -77,9 +95,27 @@ public abstract class ClientServerBridge implements Communicator, IPacketQueueab
         if(canReceivePackets)((IPacketQueueable) communicator).queuePacket(obj);
     }
 
-    @Override
-    public void queuePacket(Object obj) {
-        processFromServer(obj);
+    /* -- Remote -- */
+
+    /**
+     * Called when {@link RemoteCommunicator#connected(Connection)} is invoked.
+     * This is only possible if this class was instantiated as a remote connector via
+     * {@link #ClientServerBridge(String, int, boolean, int)} or
+     * {@link #ClientServerBridge(Client, String, int, boolean, int)} and therefore the connector instance is a
+     * {@link RemoteCommunicator}.
+     */
+    public void onConnect(){
+
+    }
+    /**
+     * Called when {@link RemoteCommunicator#connected(Connection)} is invoked.
+     * This is only possible if this class was instantiated as a remote connector via
+     * {@link #ClientServerBridge(String, int, boolean, int)} or
+     * {@link #ClientServerBridge(Client, String, int, boolean, int)} and therefore the connector instance is a
+     * {@link RemoteCommunicator}.
+     */
+    public void onDisconnect(){
+
     }
 
     /* -- Implementation of Communicator -- */
