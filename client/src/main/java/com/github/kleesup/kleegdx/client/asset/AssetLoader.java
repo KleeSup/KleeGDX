@@ -81,7 +81,7 @@ public class AssetLoader implements Disposable {
             while (itr.hasNext()){
                 Asset.BuildAsset asset = itr.next();
                 if(asset.readyToBuild()){
-                    asset.deploy(asset.builder);
+                    asset.deploy(asset.builder.get());
                     itr.remove();
                 }
             }

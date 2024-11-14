@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Registration;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -110,11 +111,11 @@ public class KryoRegisterer {
      * Registers a class by acknowledging that it extends {@link IDataTransferable} and will therefore use the build dto
      * instance for serialization and deserialization.
      * @param clazz The class to register. Needs to extend {@link IDataTransferable}.
-     * @param dtoClass The class of the data transfer object. If not {@code null}, the dto class will also be tried to
+     * @param dtoClass The class of the data transfer object. The dto class will also be tried to
      *                 be registered via {@link #register(Class)}.
      */
     public <T extends IDataTransferable<?>> void registerWithDTO(Class<T> clazz, Class<?> dtoClass){
-        if(dtoClass != null)register(dtoClass);
+        if(!isRegistered(dtoClass))register(dtoClass);
         kryo.register(clazz, new Serializer<T>() {
             @Override
             public void write(Kryo kryo, Output output, T object) {
@@ -128,12 +129,20 @@ public class KryoRegisterer {
     }
 
     /**
-     * See {@link #registerWithDTO(Class, Class)}.
+     * Checks whether a class is registered or not.
+     * @param clazz The class to check for.
+     * @return {@code true} if the class is already registered, {@code false} otherwise.
      */
-    public <T extends IDataTransferable<?>> void registerWithDTO(Class<T> clazz){
-        registerWithDTO(clazz,null);
+    public boolean isRegistered(Class<?> clazz){
+        if(kryo.isRegistrationRequired()){
+            try {
+                kryo.getRegistration(clazz);
+                return true;
+            }catch (IllegalArgumentException ignored){
+                return false;
+            }
+        }
+        return kryo.getRegistration(clazz) != null;
     }
-
-
 
 }
