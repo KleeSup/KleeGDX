@@ -42,12 +42,6 @@ public abstract class Game2d extends BaseGame implements ApplicationListener {
     }
 
     @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        stage.getViewport().update(width,height);
-    }
-
-    @Override
     public void dispose() {
         super.dispose();
         stage.dispose();
