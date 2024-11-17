@@ -72,4 +72,8 @@ public class StopWatch {
         return (int) (current * inv_max);
     }
 
+    public float getCurrentValue(){
+        return current;
+    }
+
 }
