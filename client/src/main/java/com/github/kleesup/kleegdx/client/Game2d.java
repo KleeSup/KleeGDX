@@ -34,6 +34,16 @@ public abstract class Game2d extends BaseGame implements ApplicationListener {
         inputManager.addProcessor(stage);
     }
 
+    public void setStage(Stage newStage, boolean disposeOld){
+        inputManager.removeProcessor(stage);
+        if(disposeOld)stage.dispose();
+        this.stage = newStage;
+        inputManager.addProcessor(stage);
+    }
+    public void setStage(Stage newStage){
+        setStage(newStage, false);
+    }
+
     private ShapeDrawer buildDrawer(){
         Pixmap pixmap = new Pixmap(1,1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
