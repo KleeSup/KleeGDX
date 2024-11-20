@@ -77,6 +77,7 @@ public class TextureSprite {
         sprite.scaleY = scaleY;
         sprite.setFlip(flipX, flipY);
         sprite.rotation = rotation;
+        sprite.color.set(color);
         return sprite;
     }
 
