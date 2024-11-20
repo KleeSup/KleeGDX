@@ -137,6 +137,14 @@ public class TextureSprite {
         this.x = position.x;
         this.y = position.y;
     }
+    public void setCenterAt(float x, float y){
+        this.x = x - width * .5f;
+        this.y = y - height * .5f;
+    }
+    public void setCenterAt(Vector2 center){
+        this.x = center.x - width * .5f;
+        this.y = center.y - height * .5f;
+    }
 
     public void setColor(Color color){
         this.color.set(color);
