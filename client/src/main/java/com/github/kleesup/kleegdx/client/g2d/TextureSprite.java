@@ -1,5 +1,6 @@
 package com.github.kleesup.kleegdx.client.g2d;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,12 +11,16 @@ import com.badlogic.gdx.math.Vector2;
  * Switching freely between them is always possible via {@link #setTexture(Texture)} or
  * {@link #setRegion(TextureRegion)} depending on what is wanted. Further modifications will then be done via
  * multiple public attributes or via {@link #reset()}.
+ * <p>This class is NOT thread-safe!</p>
  */
 public class TextureSprite {
+
+    private static final Color oldColor = new Color();
 
     //attributes
     public float x, y, width, height, scaleX = 1, scaleY = 1, originX, originY, rotation = 0;
     private boolean flipX, flipY;
+    private final Color color = new Color(1,1,1,1);
 
     private TextureRegion region;
     private Texture texture;
@@ -87,12 +92,15 @@ public class TextureSprite {
     /* -- Drawing -- */
 
     public void draw(Batch batch, float x, float y, float width, float height){
+        oldColor.set(batch.getColor());
+        batch.setColor(color);
         if(isFullTexture()){
             batch.draw(texture, x, y, originX, originY, width, height, scaleX, scaleY, rotation, 0, 0,
                 texture.getWidth(), texture.getHeight(), flipX, flipY);
         }else{
             batch.draw(region, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
         }
+        batch.setColor(oldColor);
     }
 
     public void draw(Batch batch, float x, float y){
@@ -127,5 +135,11 @@ public class TextureSprite {
         this.y = position.y;
     }
 
+    public void setColor(Color color){
+        this.color.set(color);
+    }
+    public void setColor(float r, float g, float b, float a){
+        this.color.set(r,g,b,a);
+    }
 
 }
