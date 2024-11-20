@@ -76,4 +76,8 @@ public class StopWatch {
         return current;
     }
 
+    public float getTimeLeft(){
+        return Math.max(0, max - current);
+    }
+
 }
