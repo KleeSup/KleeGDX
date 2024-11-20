@@ -25,19 +25,21 @@ public class TextureSprite {
     private TextureRegion region;
     private Texture texture;
     public TextureSprite(Texture texture){
-        this.texture = texture;
+        setTexture(texture);
     }
     public TextureSprite(TextureRegion region){
-        this.region = region;
+        setRegion(region);
     }
 
     public void setTexture(Texture texture){
         this.texture = texture;
         this.region = null;
+        reset();
     }
     public void setRegion(TextureRegion region){
         this.texture = null;
         this.region = region;
+        reset();
     }
 
     /**
