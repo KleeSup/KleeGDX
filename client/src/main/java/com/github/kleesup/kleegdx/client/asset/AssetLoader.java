@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.Disposable;
 import com.github.kleesup.kleegdx.core.collection.MappedCollection;
 import com.github.kleesup.kleegdx.core.util.Verify;
+import lombok.Getter;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ public class AssetLoader implements Disposable {
     private static final long LOAD_DEADLOCK = TimeUnit.SECONDS.toMillis(12);
 
     private boolean ownsManager;
+    @Getter
     private final AssetManager manager;
     /** All assets that needed to be loaded through the {@link AssetManager} */
     private final LinkedList<Asset.LoadAsset<?>> TO_LOAD = new LinkedList<>();
@@ -137,5 +139,6 @@ public class AssetLoader implements Disposable {
     public <T> Asset<T> qB(Supplier<T> b, Asset<?>... d){
         return queueBuild(b,d);
     }
+
 
 }
