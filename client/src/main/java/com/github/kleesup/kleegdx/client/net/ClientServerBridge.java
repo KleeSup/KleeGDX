@@ -6,6 +6,8 @@ import com.github.kleesup.kleegdx.core.net.packet.IPacketQueueable;
 import com.github.kleesup.kleegdx.core.net.packet.TypePacketProcessor;
 import lombok.Getter;
 
+import java.util.function.Consumer;
+
 /**
  * A class that can be used for cases where an application supports both remote and integrated servers. Therefore, this
  * class manages the required {@link Communicator} for each use case. It requires a packet registration for the cases
@@ -29,12 +31,12 @@ public abstract class ClientServerBridge implements Communicator, IPacketQueueab
             @Override
             public void connected(Connection connection) {
                 super.connected(connection);
-                onConnect();
+                onConnect(fun -> ClientServerBridge.this.onConnect());
             }
             @Override
             public void disconnected(Connection connection) {
                 super.disconnected(connection);
-                onDisconnect();
+                onConnect(fun -> ClientServerBridge.this.onDisconnect());
             }
         };
         this.communicator = remote;
