@@ -145,6 +145,10 @@ public class TextureSprite {
         this.x = center.x - width * .5f;
         this.y = center.y - height * .5f;
     }
+    public void setOriginCenter(){
+        this.originX = width * .5f;
+        this.originY = height * .5f;
+    }
 
     public void setColor(Color color){
         this.color.set(color);
