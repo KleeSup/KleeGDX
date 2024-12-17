@@ -19,6 +19,10 @@ public class StopWatch {
     public StopWatch(float max){
         reset(max);
     }
+    public StopWatch(float max, boolean looping){
+        this(max);
+        this.looping = looping;
+    }
 
     /**
      * Resets this stopwatch with a new max time.
