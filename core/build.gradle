@@ -9,6 +9,7 @@ dependencies {
     api "com.esotericsoftware:kryo:$kryoVersion"
     api "com.github.crykn:kryonet:$kryoNetVersion"
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.github.kleesup:KleeSwept:$kleeSweptVersion"
 }
 
 publishing {
