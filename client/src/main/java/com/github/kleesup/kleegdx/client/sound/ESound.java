@@ -1,7 +1,6 @@
 package com.github.kleesup.kleegdx.client.sound;
 
 import com.badlogic.gdx.audio.Sound;
-import com.github.kleesup.heiopeibattlegame.HeiopeiBattleGame;
 
 /**
  * Implementation of {@link Sound} that connects to {@link AudioEngine}.
@@ -17,7 +16,7 @@ public class ESound implements Sound {
     }
 
     private AudioEngine engine(){
-        return HeiopeiBattleGame.getInstance().getAudio();
+        return AudioEngine.getInstance();
     }
 
     public long play(float x, float y){
