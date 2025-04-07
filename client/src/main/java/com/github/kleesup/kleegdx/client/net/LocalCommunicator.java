@@ -4,6 +4,10 @@ package com.github.kleesup.kleegdx.client.net;
  * An implementation of {@link Communicator} that is used it the server instance to connect to is locally installed by
  * the same program running the client. Therefore, there should be some instance to access the server which is used
  * to directly send packets via this communicator.
+ * <p>
+ * Usually, this communicator is used when the client is starting a {@link AbstractIntegratedServer} instance within
+ * the same application.
+ * </p>
  */
 public class LocalCommunicator implements Communicator {
 

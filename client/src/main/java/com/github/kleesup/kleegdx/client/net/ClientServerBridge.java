@@ -18,6 +18,9 @@ public abstract class ClientServerBridge implements Communicator, IPacketQueueab
 
     private final Communicator communicator;
     private final boolean canReceivePackets;
+
+    // -- Remote server constructors --
+
     /**
      * Builds a new bridge that connects to a host remote server. This will use the {@link RemoteCommunicator}.
      * @param clientObj A (custom) client object that will be given to the {@link RemoteCommunicator}.
@@ -47,14 +50,7 @@ public abstract class ClientServerBridge implements Communicator, IPacketQueueab
         this(new Client(), host, port, useUdp, maxPacketsPerRead);
     }
 
-    /**
-     * Builds a new bridge that connects to a local integrated server. This will use the {@link LocalCommunicator}.
-     * @param server The local server instance to use.
-     */
-    public ClientServerBridge(AbstractIntegratedServer server){
-        this.communicator = new LocalCommunicator(server);
-        this.canReceivePackets = false;
-    }
+    // -- Local integrated constructors --
 
     /**
      * Builds a bridge that connects to a local integrated server. This bridge will queue incoming packets. This will
@@ -68,6 +64,17 @@ public abstract class ClientServerBridge implements Communicator, IPacketQueueab
         registerIncomingPackets(communicator.getListener());
         this.canReceivePackets = true;
     }
+
+    /**
+     * Builds a new bridge that connects to a local integrated server. This will use the {@link LocalCommunicator}.
+     * @param server The local server instance to use.
+     */
+    public ClientServerBridge(AbstractIntegratedServer server){
+        this.communicator = new LocalCommunicator(server);
+        this.canReceivePackets = false;
+    }
+
+
 
     /* -- Packets -- */
 

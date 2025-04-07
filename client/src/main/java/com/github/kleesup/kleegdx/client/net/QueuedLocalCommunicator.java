@@ -13,6 +13,7 @@ import lombok.Getter;
 @Getter
 public class QueuedLocalCommunicator extends LocalCommunicator implements NetParticipant, IPacketQueueable {
 
+    /** Internal listener and packet queue instance. */
     protected final QueuedTypeListenerClient listener;
     public QueuedLocalCommunicator(AbstractIntegratedServer server, int maxPacketsPerRead) {
         super(server);
@@ -38,5 +39,11 @@ public class QueuedLocalCommunicator extends LocalCommunicator implements NetPar
     @Override
     public void queuePacket(Object obj) {
         listener.queuePacket(obj);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
     }
 }
