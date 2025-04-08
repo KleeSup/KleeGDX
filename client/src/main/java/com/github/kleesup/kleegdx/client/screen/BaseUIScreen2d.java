@@ -69,9 +69,7 @@ public abstract class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Mai
     }
 
     @Override
-    protected void afterRender(float delta) {
-
-    }
+    protected void afterRender(float delta) {}
 
     @Override
     public void resize(int i, int i1) {
