@@ -41,6 +41,13 @@ public class UiStage extends Stage {
         return root;
     }
 
+    /**
+     * Clears the content of the ui root.
+     */
+    public void clearUiRoot(){
+        uiRoot.clear();
+    }
+
     @Override
     public void addActor(Actor actor) {
         getRoot().addActorAt(0,actor);
@@ -81,8 +88,17 @@ public class UiStage extends Stage {
         return false;
     }
 
+    /**
+     * Will resize this stages viewport and fire a
+     * {@link com.github.kleesup.kleegdx.client.ui.ResizeListener.ResizeEvent}.
+     * @param width The new screen-width.
+     * @param height The new screen-height.
+     * @param centerCamera Whether the camera should be centered (usually this should be {@code true}).
+     */
     public void resize(int width, int height, boolean centerCamera){
         getViewport().update(width,height,centerCamera);
+        ResizeListener.ResizeEvent event = new ResizeListener.ResizeEvent(width,height);
+        getRoot().fire(event);
     }
     public void resize(int width, int height){
         resize(width,height,true);

@@ -16,6 +16,8 @@ public abstract class BaseGame implements ApplicationListener {
 
     @Getter
     protected Screen currentScreen;
+
+    /** Decides whether the previous screen should be disposed whenever a new one is set. */
     @Setter(value = AccessLevel.PROTECTED)
     protected boolean autoDisposeScreen = true;
     private ApplicationListener screenManager = NULL_MANAGER;
@@ -27,6 +29,10 @@ public abstract class BaseGame implements ApplicationListener {
     protected boolean fixAndroidResume = true;
     private boolean alreadyCreated = false;
 
+    /**
+     * Builds a logger instance with a given tag. Method can be overridden
+     * @param tag The tag to build the logger with.
+     */
     protected void buildLogger(String tag){
         this.logger = new Logger(tag, 3);
     }
@@ -35,6 +41,11 @@ public abstract class BaseGame implements ApplicationListener {
         return paused.get();
     }
 
+    /**
+     * Sets the current screen and therefore replaces the old one. If {@link #setAutoDisposeScreen(boolean)} is set to
+     * {@code true}, {@link Screen#dispose()} will be invoked.
+     * @param screen The screen to set.
+     */
     public void setScreen(Screen screen){
         if(currentScreen != null){
             currentScreen.hide();
@@ -43,7 +54,8 @@ public abstract class BaseGame implements ApplicationListener {
         currentScreen = screen;
         if(currentScreen != null){
             currentScreen.show();
-            screenManager = new ScreenManager(currentScreen);
+            ScreenManager.instance.screen = currentScreen;
+            screenManager = ScreenManager.instance;
         }else screenManager = NULL_MANAGER;
     }
 
@@ -65,7 +77,13 @@ public abstract class BaseGame implements ApplicationListener {
         }
         alreadyCreated = true;
         Gdx.input.setInputProcessor(inputManager);
+        buildApp();
     }
+
+    /**
+     * This method will be safely
+     */
+    protected abstract void buildApp();
 
     @Override
     public void resize(int width, int height) {
@@ -96,6 +114,7 @@ public abstract class BaseGame implements ApplicationListener {
 
     /* -- ScreenManager -- */
 
+    //Null object pattern
     private static final ApplicationListener NULL_MANAGER = new ApplicationListener() {
         @Override
         public void create() {}
@@ -113,7 +132,9 @@ public abstract class BaseGame implements ApplicationListener {
 
     private static final class ScreenManager implements ApplicationListener{
 
-        private final Screen screen;
+        private static final ScreenManager instance = new ScreenManager(null);
+
+        private Screen screen;
         private ScreenManager(Screen screen){
             this.screen = screen;
         }

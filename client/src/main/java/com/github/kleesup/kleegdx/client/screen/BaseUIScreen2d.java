@@ -10,6 +10,10 @@ import com.github.kleesup.kleegdx.client.Game2d;
  * An implementation of {@link BaseScreen} that focuses on Scene2d. Therefore, it differs from {@link BaseScreen2d}
  * because it doesn't require a {@link com.badlogic.gdx.utils.viewport.Viewport} and further also doesn't render to any
  * batch.
+ * <p>
+ * This class can be used when an instance of {@link com.github.kleesup.kleegdx.client.ui.UiStage} is not available.
+ * Otherwise, it is recommended to use that class because it supports cross-screen ui management.
+ * </p>
  */
 public abstract class BaseUIScreen2d<Main extends Game2d> extends BaseScreen<Main> {
 

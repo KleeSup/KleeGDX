@@ -1,5 +1,6 @@
 package com.github.kleesup.kleegdx.core.util;
 
+import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.utils.Logger;
 
 /**

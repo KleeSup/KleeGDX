@@ -10,6 +10,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import lombok.Getter;
 import space.earlygrey.shapedrawer.ShapeDrawer;
+
+/**
+ * Implementation of {@link BaseGame} for 2d games. By default, it builds a {@link SpriteBatch}, a {@link ShapeDrawer}
+ * and a {@link Stage}.
+ */
 @Getter
 public abstract class Game2d extends BaseGame implements ApplicationListener {
 
@@ -25,8 +30,7 @@ public abstract class Game2d extends BaseGame implements ApplicationListener {
     /* -- ApplicationListener implementation -- */
 
     @Override
-    public void create() {
-        super.create();
+    protected void buildApp() {
         instance = this;
         batch = new SpriteBatch();
         shapeDrawer = buildDrawer();
@@ -34,6 +38,11 @@ public abstract class Game2d extends BaseGame implements ApplicationListener {
         inputManager.addProcessor(stage);
     }
 
+    /**
+     * Sets a new stage instance.
+     * @param newStage The new stage instance to set.
+     * @param disposeOld Whether to dispose the previous one.
+     */
     public void setStage(Stage newStage, boolean disposeOld){
         inputManager.removeProcessor(stage);
         if(disposeOld)stage.dispose();
@@ -41,9 +50,13 @@ public abstract class Game2d extends BaseGame implements ApplicationListener {
         inputManager.addProcessor(stage);
     }
     public void setStage(Stage newStage){
-        setStage(newStage, false);
+        setStage(newStage, true);
     }
 
+    /**
+     * Builds a drawer instance with a 1x1 pixel texture in white.
+     * @return The build drawer instance.
+     */
     private ShapeDrawer buildDrawer(){
         Pixmap pixmap = new Pixmap(1,1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);

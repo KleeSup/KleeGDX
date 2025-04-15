@@ -2,6 +2,8 @@ package com.github.kleesup.kleegdx.server.util;
 
 import com.github.kleesup.kleegdx.core.util.AbstractLogger;
 
+import java.io.PrintStream;
+
 /**
  * Implementation of {@link AbstractLogger} that logs into the {@link System#out} or {@link System#err} stream,
  * depending on logging type. Useful for headless non-gdx applications such as a server.
@@ -41,15 +43,15 @@ public class ConsoleLogger extends AbstractLogger {
     Mode convertToMode(LogType type){
         Mode mode;
         switch (type){
-            default:
             case ERROR:
                 mode = Mode.ERROR;
                 break;
-            case INFO:
-                mode = Mode.INFO;
-                break;
             case DEBUG:
                 mode = Mode.DEBUG;
+                break;
+            case INFO:
+            default:
+                mode = Mode.INFO;
                 break;
         }
         return mode;
@@ -57,16 +59,21 @@ public class ConsoleLogger extends AbstractLogger {
 
     /* -- Implementation of AbstractLogger -- */
 
+    private final PrintStream stream;
     private final String tag;
-    public ConsoleLogger(String tag) {
+    public ConsoleLogger(PrintStream stream, String tag) {
         super(null);
+        this.stream = stream;
         this.tag = tag;
+    }
+    public ConsoleLogger(String tag){
+        this(System.out, tag);
     }
 
     @Override
     protected void successfulLog(LogType type, String msg) {
         if(type == LogType.ERROR)System.err.println(convertToMode(type).format(tag,msg));
-        else System.out.println(convertToMode(type).format(tag,msg));
+        else stream.println(convertToMode(type).format(tag,msg));
     }
 
     @Override

@@ -2,10 +2,16 @@ package com.github.kleesup.kleegdx.client.asset;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.Disposable;
+import com.github.kleesup.kleegdx.client.sound.EMusic;
+import com.github.kleesup.kleegdx.client.sound.EMusicLoader;
+import com.github.kleesup.kleegdx.client.sound.ESound;
+import com.github.kleesup.kleegdx.client.sound.ESoundLoader;
 import com.github.kleesup.kleegdx.core.collection.MappedCollection;
 import com.github.kleesup.kleegdx.core.util.Verify;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -19,7 +25,8 @@ import java.util.function.Supplier;
 public class AssetLoader implements Disposable {
 
     /** The time for a loading timeout */
-    private static final long LOAD_DEADLOCK = TimeUnit.SECONDS.toMillis(12);
+    @Setter
+    private static long LOAD_DEADLOCK = TimeUnit.SECONDS.toMillis(30);
 
     private boolean ownsManager;
     @Getter
@@ -35,10 +42,20 @@ public class AssetLoader implements Disposable {
         Verify.nonNullArg(manager, "AssetManager cannot be null!");
         this.manager = manager;
         this.ownsManager = false;
+        addDefaultLoaders();
     }
     public AssetLoader(){
         this(new AssetManager());
         this.ownsManager = true;
+    }
+
+    /**
+     * Registers all extra default loaders.
+     */
+    protected void addDefaultLoaders(){
+        FileHandleResolver resolver = manager.getFileHandleResolver();
+        manager.setLoader(ESound.class, new ESoundLoader(resolver));
+        manager.setLoader(EMusic.class, new EMusicLoader(resolver));
     }
 
     /**
@@ -140,5 +157,14 @@ public class AssetLoader implements Disposable {
         return queueBuild(b,d);
     }
 
+    // -- Default loaders --
+
+    public Asset<ESound> queueSoundLoad(String file){
+        return queueLoad(file, ESound.class);
+    }
+
+    public Asset<EMusic> queueMusicLoad(String file){
+        return queueLoad(file, EMusic.class);
+    }
 
 }

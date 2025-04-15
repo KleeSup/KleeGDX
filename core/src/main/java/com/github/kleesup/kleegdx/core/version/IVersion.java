@@ -8,11 +8,6 @@ package com.github.kleesup.kleegdx.core.version;
 public interface IVersion extends Comparable<Integer> {
 
     /**
-     * @return {@code true} if this version is the newest currently available, {@code false} otherwise.
-     */
-    boolean isNewest();
-
-    /**
      * @return Gets the name of this version e.g. <code>1.23.5</code>.
      */
     String getName();

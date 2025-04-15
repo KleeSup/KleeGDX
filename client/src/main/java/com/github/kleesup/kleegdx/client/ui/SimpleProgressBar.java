@@ -9,6 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.github.kleesup.kleegdx.client.g2d.TextureSprite;
 import lombok.Setter;
 
+/**
+ * Simple progression bar which supports three colors for background, border and bar.
+ * Can be used for testing or simplistic health bars.
+ */
 @Setter
 public class SimpleProgressBar extends Actor {
 
@@ -32,16 +36,32 @@ public class SimpleProgressBar extends Actor {
         this(max, 0);
     }
 
+    private float borderSize2, borderSize3;
     public void setBorderSize(float borderSize) {
         this.borderSize = Math.max(0, borderSize);
+        this.borderSize2 = borderSize * 2;
+        this.borderSize3 = borderSize * 3;
     }
 
+    public void setColors(Color background, Color bar, Color border){
+        this.background = background;
+        this.bar = bar;
+        this.border = border;
+    }
+
+    /* -- Values -- */
+
+    private float invValue;
+    private void calculateInvValue(){
+        invValue = value / max;
+    }
     public void setMax(float max) {
         this.max = Math.max(0, max);
+        calculateInvValue();
     }
-
     public void setValue(float value) {
         this.value = MathUtils.clamp(value, 0, max);
+        calculateInvValue();
     }
     public void drain(float value){
         setValue(this.value - value);
@@ -50,11 +70,7 @@ public class SimpleProgressBar extends Actor {
         setValue(this.value + value);
     }
 
-    public void setColors(Color background, Color bar, Color border){
-        this.background = background;
-        this.bar = bar;
-        this.border = border;
-    }
+    /* -- Rendering -- */
 
     private final Color writeColor = new Color();
     @Override
@@ -78,8 +94,8 @@ public class SimpleProgressBar extends Actor {
         }
 
         //no border width/height
-        float nbw = getWidth()-(borderSize*3); //I have no idea why this is *3 instead of 2 but only way it works.
-        float nbh = getHeight()-(borderSize*2);
+        float nbw = getWidth()-borderSize3; //I have no idea why this is *3 instead of 2 but only way it works.
+        float nbh = getHeight()-borderSize2;
 
         //render background
         if(value != max){ //no render call needed if overridden by value
