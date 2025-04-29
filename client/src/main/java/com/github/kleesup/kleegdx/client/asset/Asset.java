@@ -12,10 +12,9 @@ import java.util.function.Supplier;
  * <p><pre>Tip: For static asset classes use interfaces as they reduce Javas boilerplate as variables defined in interfaces
  * are <code>public static final</code> by default.<pre>
  * {@code public interface Assets{
- *     LoadAsset<Texture> asset = someAssetLoader.qL("myasset.png", Texture.class);
+ *     Asset<Texture> asset = myAssetLoader.qL("myasset.png", Texture.class);
  *     ...
- * }
- * }
+ * } }
  * </pre></p>
  * @param <T> The type of the asset.
  */
