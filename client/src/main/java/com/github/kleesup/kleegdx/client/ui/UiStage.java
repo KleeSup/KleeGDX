@@ -8,7 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class UiStage extends Stage {
+/**
+ * An advanced implementation of {@link Stage} useful for building ui related things (not entity rendering etc. but works
+ * as well). The base idea is that it features a {@link Table} which is the base on which UIs are build on. Furthermore,
+ * it can handle resizing of actors (if {@link #resize(int, int)} is called).
+ */
+public class UiStage extends Stage implements Resizeable {
 
     protected final Table uiRoot;
 
@@ -100,6 +105,8 @@ public class UiStage extends Stage {
         ResizeListener.ResizeEvent event = new ResizeListener.ResizeEvent(width,height);
         getRoot().fire(event);
     }
+
+    @Override
     public void resize(int width, int height){
         resize(width,height,true);
     }
